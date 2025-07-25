@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NET ICON Clash Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .placeholder-custom::placeholder {
+            color: #9ca3af;
+        }
+        .tab-button.active {
+            background-color: #4f46e5;
+            color: #ffffff;
+        }
+        .tab-panel {
+            display: none;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* Digital Background Animation */
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .digital-bg {
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #0c4a6e, #0369a1);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+        }
+
+        /* Light Mode Styles */
+        html.light {
+            --bg-primary: #f3f4f6;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f9fafb;
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-muted: #6b7280;
+            --border-color: #d1d5db;
+        }
+        html.light body {
+            background: linear-gradient(-45deg, #e0e7ff, #c7d2fe, #a5b4fc, #818cf8);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            color: var(--text-primary);
+        }
+        html.light .main-container {
+             background-color: rgba(255, 255, 255, 0.8);
+             backdrop-filter: blur(8px);
+        }
+        html.light .bg-gray-900 { background-color: var(--bg-tertiary); }
+        html.light .bg-gray-700 { background-color: #e5e7eb; }
+        html.light .text-white { color: var(--text-primary); }
+        html.light .text-gray-200 { color: var(--text-secondary); }
+        html.light .text-gray-300 { color: #4b5563; }
+        html.light .text-gray-400 { color: var(--text-muted); }
+        html.light .border-gray-700 { border-color: var(--border-color); }
+        html.light .border-gray-600 { border-color: var(--border-color); }
+        html.light .placeholder-custom::placeholder { color: #a1a1aa; }
+        html.light .tab-button { color: var(--text-secondary); }
+        html.light .tab-button.active { color: #ffffff; }
+        html.light #theme-toggle:hover { background-color: #e5e7eb; }
+    </style>
+</head>
+<body class="digital-bg text-gray-200">
+
+    <div class="w-full max-w-4xl bg-gray-800/80 backdrop-blur-sm main-container rounded-2xl shadow-2xl p-6 md:p-8 relative">
+        
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle" class="absolute top-4 right-4 z-10 p-2 rounded-full text-gray-400 hover:bg-gray-700 focus:outline-none">
+            <svg id="sun-icon" class="h-6 w-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg id="moon-icon" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">NET 🌐 ICON Clash Converter</h1>
+            <p class="text-gray-400 mt-2 text-xs">Net Icon Solusi Internet Murah & Pusat Layanan Digital</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="mb-6 flex border-b border-gray-700">
+            <button id="tabBtnLinkToYaml" class="tab-button flex-1 py-2 px-4 font-semibold transition-colors duration-300">Link ke YAML</button>
+            <button id="tabBtnYamlToLink" class="tab-button flex-1 py-2 px-4 font-semibold transition-colors duration-300">YAML ke Link</button>
+        </div>
+
+        <!-- Tab Panel: Link to YAML -->
+        <div id="panelLinkToYaml" class="tab-panel">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Input Section -->
+                <div class="flex flex-col">
+                    <label for="inputLink" class="mb-2 font-semibold text-gray-300">Input Tautan (VMess, VLess, Trojan)</label>
+                    <textarea id="inputLink" class="w-full h-80 flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 placeholder-custom" placeholder="Tempelkan satu atau lebih tautan di sini..."></textarea>
+                </div>
+                <!-- Output Section -->
+                <div class="flex flex-col">
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="outputYaml" class="font-semibold text-gray-300">Output Konfigurasi Bersih (YAML)</label>
+                        <div class="flex gap-2">
+                            <button id="copyYamlBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">Salin</button>
+                        </div>
+                    </div>
+                    <div class="w-full h-80 flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 overflow-auto">
+                        <pre id="outputYaml" class="text-gray-300 whitespace-pre-wrap break-all"></pre>
+                    </div>
+                    <!-- Download Section -->
+                    <div class="mt-2 flex items-center gap-2">
+                        <input type="text" id="yamlFilename" class="flex-grow bg-gray-700 border border-gray-600 rounded-lg p-2 text-gray-300 placeholder-custom focus:ring-2 focus:ring-purple-500" placeholder="Nama File..." value="config.yaml">
+                        <button id="downloadYamlBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">Unduh</button>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button id="convertLinkToYamlBtn" class="w-full md:w-2/3 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-lg shadow-lg">Konversi ke YAML & Buat Grup</button>
+            </div>
+        </div>
+
+        <!-- Tab Panel: YAML to Link -->
+        <div id="panelYamlToLink" class="tab-panel">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Input Section -->
+                <div class="flex flex-col">
+                    <label for="inputYaml" class="mb-2 font-semibold text-gray-300">Input Konfigurasi YAML</label>
+                    <textarea id="inputYaml" class="w-full h-80 flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 placeholder-custom" placeholder="Tempelkan konfigurasi YAML lengkap di sini..."></textarea>
+                </div>
+                <!-- Output Section -->
+                <div class="flex flex-col">
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="outputLink" class="font-semibold text-gray-300">Output Tautan (VMess, VLess, Trojan)</label>
+                        <button id="copyLinkBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">Salin</button>
+                    </div>
+                    <div class="w-full h-80 flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 overflow-auto">
+                        <pre id="outputLink" class="text-gray-300 whitespace-pre-wrap break-all"></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button id="convertYamlToLinkBtn" class="w-full md:w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-lg shadow-lg">Konversi ke Tautan</button>
+            </div>
+        </div>
+
+        <!-- Footer / Contact Link -->
+        <div class="mt-8 text-center border-t border-gray-700 pt-4 flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+            <a href="https://www.youtube.com/@NET-ICON" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.267,4,12,4,12,4S5.733,4,4.186,4.418 c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.733,2,12,2,12s0,4.267,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768 C5.733,20,12,20,12,20s6.267,0,7.814-0.418c0.861-0.23,1.538-0.908,1.768-1.768C22,16.267,22,12,22,12S22,7.733,21.582,6.186z M9.933,15.5V8.5l6.5,3.5L9.933,15.5z"></path></svg>
+                NET ICON
+            </a>
+            <a href="https://www.tiktok.com/@netic0n?_t=ZS-8yJZXPEo5rt&_r=1" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.43.05-4.85-.38-6.75-1.77-1.02-.74-1.86-1.69-2.51-2.76-.34-.55-.6-1.14-.79-1.76-.05-.17-.08-.33-.13-.51v-4.67c.65 1.1 1.54 2.01 2.61 2.75 1.03.7 2.24 1.17 3.48 1.34.63.08 1.27.02 1.9-.13 1.43-.35 2.64-1.21 3.43-2.39.66-.96 1-2.12 1.06-3.34.02-1.09.01-2.18.01-3.27-.01-1.02-.23-2.06-.7-2.96-.51-.98-1.26-1.8-2.19-2.42-.69-.46-1.47-.81-2.3-1.02-.79-.19-1.6-.23-2.41-.23v-4.17c1.13.08 2.25.39 3.26.91.48.24.93.53 1.34.87.51.43 1 .96 1.41 1.55.43.63.78 1.33 1.06 2.06.02.05.04.1.06.15z"></path></svg>
+                TIKTOK
+            </a>
+            <a href="https://wa.me/6285121930581" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 12c0 1.74.45 3.38 1.25 4.85L2 22l5.27-1.38c1.41.75 3 1.18 4.73 1.18H12c5.46 0 9.9-4.45 9.9-9.9S17.5 2 12.04 2zM12 20.15h-.04c-1.5 0-2.92-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32A8.02 8.02 0 014.12 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-7.96 8.15zM17.53 14.3c-.27-.13-1.6-  .79-1.85-.88s-.43-.13-.61.13c-.18.27-.7.88-.86 1.06s-.32.2-.6.07c-.28-.13-1.18-.44-2.25-1.39S10.03 12 9.76 11.73c-.27-.27-.01-.42.12-.55s.27-.32.4-.42c.13-.1.18-.18.27-.3.1-.13.05-.27 0-.4s-.6-.72-.82-.98c-.22-.27-.45-.23-.61-.23h-.5a1 1 0 00-.74.35c-.27.27-1.04 1.02-1.04 2.48s1.06 2.88 1.2 3.08c.13.2 2.08 3.18 5.04 4.48.71.32 1.27.5 1.7.68.71.27 1.36.23 1.88.14.57-.1.94-.2.94-.2.43-.27.9-.7.9-.7s.43-.51.32-1.02c-.1-.5-.37-.58-.64-.7z"></path></svg>
+                BOT ORDER 24JAM
+            </a>
+             <a href="https://wa.me/6282249832509" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 12c0 1.74.45 3.38 1.25 4.85L2 22l5.27-1.38c1.41.75 3 1.18 4.73 1.18H12c5.46 0 9.9-4.45 9.9-9.9S17.5 2 12.04 2zM12 20.15h-.04c-1.5 0-2.92-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32A8.02 8.02 0 014.12 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-7.96 8.15zM17.53 14.3c-.27-.13-1.6-  .79-1.85-.88s-.43-.13-.61.13c-.18.27-.7.88-.86 1.06s-.32.2-.6.07c-.28-.13-1.18-.44-2.25-1.39S10.03 12 9.76 11.73c-.27-.27-.01-.42.12-.55s.27-.32.4-.42c.13-.1.18-.18.27-.3.1-.13.05-.27 0-.4s-.6-.72-.82-.98c-.22-.27-.45-.23-.61-.23h-.5a1 1 0 00-.74.35c-.27.27-1.04 1.02-1.04 2.48s1.06 2.88 1.2 3.08c.13.2 2.08 3.18 5.04 4.48.71.32 1.27.5 1.7.68.71.27 1.36.23 1.88.14.57-.1.94-.2.94-.2.43-.27.9-.7.9-.7s.43-.51.32-1.02c-.1-.5-.37-.58-.64-.7z"></path></svg>
+                ADMIN
+            </a>
+        </div>
+
+        <!-- Message Box -->
+        <div id="messageBox" class="fixed top-5 right-5 bg-blue-500 text-white py-2 px-4 rounded-lg shadow-lg text-sm opacity-0 transition-opacity duration-300">Pesan</div>
+    </div>
+
+    <script>
+        // --- Bagian Logika Utama & Manajemen UI ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        const tabBtnLinkToYaml = document.getElementById('tabBtnLinkToYaml');
+        const tabBtnYamlToLink = document.getElementById('tabBtnYamlToLink');
+        const panelLinkToYaml = document.getElementById('panelLinkToYaml');
+        const panelYamlToLink = document.getElementById('panelYamlToLink');
+        const convertLinkToYamlBtn = document.getElementById('convertLinkToYamlBtn');
+        const copyYamlBtn = document.getElementById('copyYamlBtn');
+        const downloadYamlBtn = document.getElementById('downloadYamlBtn');
+        const yamlFilenameInput = document.getElementById('yamlFilename');
+        const inputLink = document.getElementById('inputLink');
+        const outputYaml = document.getElementById('outputYaml');
+        const convertYamlToLinkBtn = document.getElementById('convertYamlToLinkBtn');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        const inputYaml = document.getElementById('inputYaml');
+        const outputLink = document.getElementById('outputLink');
+        const messageBox = document.getElementById('messageBox');
+
+        // Theme Logic
+        const applyTheme = (theme) => {
+            if (theme === 'light') {
+                document.documentElement.classList.add('light');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('light');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        };
+
+        const toggleTheme = () => {
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        };
+
+        themeToggleBtn.addEventListener('click', toggleTheme);
+
+        // Check for saved theme on load
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
+        })();
+
+
+        function switchTab(activeTab) {
+            if (activeTab === 'linkToYaml') {
+                tabBtnLinkToYaml.classList.add('active');
+                tabBtnYamlToLink.classList.remove('active');
+                panelLinkToYaml.classList.add('active');
+                panelYamlToLink.classList.remove('active');
+            } else {
+                tabBtnLinkToYaml.classList.remove('active');
+                tabBtnYamlToLink.classList.add('active');
+                panelLinkToYaml.classList.remove('active');
+                panelYamlToLink.classList.add('active');
+            }
+        }
+
+        tabBtnLinkToYaml.addEventListener('click', () => switchTab('linkToYaml'));
+        tabBtnYamlToLink.addEventListener('click', () => switchTab('yamlToLink'));
+        switchTab('linkToYaml');
+
+        function showMessage(message, isError = false) {
+            messageBox.textContent = message;
+            messageBox.classList.remove('bg-red-500', 'bg-blue-500');
+            messageBox.classList.add(isError ? 'bg-red-500' : 'bg-blue-500');
+            messageBox.classList.remove('opacity-0');
+            setTimeout(() => { messageBox.classList.add('opacity-0'); }, 3000);
+        }
+        
+        function copyToClipboard(text, successMessage, failureMessage) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.top = '-9999px';
+            textArea.style.left = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) showMessage(successMessage);
+                else showMessage(failureMessage, true);
+            } catch (err) {
+                showMessage(failureMessage, true);
+                console.error('Gagal menyalin:', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // --- Bagian 1: Logika Konversi Link ke YAML ---
+
+        convertLinkToYamlBtn.addEventListener('click', () => {
+            const inputText = inputLink.value.trim();
+            if (!inputText) { showMessage('Input tautan tidak boleh kosong!', true); return; }
+            const lines = inputText.split(/[\r\n]+/).filter(line => line.trim() !== '');
+            const proxies = [];
+            lines.forEach(line => {
+                try {
+                    let proxy;
+                    if (line.startsWith('vmess://')) proxy = parseVmess(line);
+                    else if (line.startsWith('vless://')) proxy = parseVless(line);
+                    else if (line.startsWith('trojan://')) proxy = parseTrojan(line);
+                    if (proxy) proxies.push(proxy);
+                } catch (e) {
+                    console.error('Gagal mem-parsing baris:', line, e);
+                    showMessage(`Format tautan tidak valid: ${line.substring(0, 20)}...`, true);
+                }
+            });
+            if (proxies.length > 0) {
+                outputYaml.textContent = generateFullYaml(proxies.filter(p => p));
+                showMessage('Konversi ke YAML berhasil!');
+            } else {
+                outputYaml.textContent = '';
+                showMessage('Tidak ada tautan valid yang ditemukan.', true);
+            }
+        });
+
+        copyYamlBtn.addEventListener('click', () => {
+            const textToCopy = outputYaml.textContent;
+            if (textToCopy) copyToClipboard(textToCopy, 'YAML berhasil disalin!', 'Gagal menyalin YAML.');
+            else showMessage('Tidak ada YAML untuk disalin.', true);
+        });
+
+        downloadYamlBtn.addEventListener('click', () => {
+            const yamlContent = outputYaml.textContent;
+            if (!yamlContent) {
+                showMessage('Tidak ada output YAML untuk diunduh.', true);
+                return;
+            }
+
+            let filename = yamlFilenameInput.value.trim();
+            if (!filename) {
+                filename = 'config.yaml';
+            } else if (!filename.toLowerCase().endsWith('.yaml')) {
+                filename += '.yaml';
+            }
+
+            const blob = new Blob([yamlContent], { type: 'application/x-yaml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showMessage('Unduhan YAML dimulai...');
+        });
+        
+        // --- Bagian 2: Logika Konversi YAML ke Link ---
+
+        convertYamlToLinkBtn.addEventListener('click', () => {
+            const yamlText = inputYaml.value.trim();
+            if (!yamlText) { showMessage('Input YAML tidak boleh kosong!', true); return; }
+            try {
+                const proxies = parseProxiesFromYaml(yamlText);
+                if (proxies.length === 0) {
+                    showMessage('Tidak ada proksi yang ditemukan di dalam YAML.', true);
+                    outputLink.textContent = '';
+                    return;
+                }
+                const links = proxies.map(proxy => {
+                    if (proxy.type === 'vmess') return createVmessLink(proxy);
+                    if (proxy.type === 'vless') return createVlessLink(proxy);
+                    if (proxy.type === 'trojan') return createTrojanLink(proxy);
+                    return null;
+                }).filter(link => link);
+                if (links.length > 0) {
+                    outputLink.textContent = links.join('\n');
+                    showMessage(`Berhasil mengonversi ${links.length} proksi!`);
+                } else {
+                    outputLink.textContent = '';
+                    showMessage('Tidak dapat mengonversi proksi yang ditemukan.', true);
+                }
+            } catch (e) {
+                console.error("Error parsing YAML:", e);
+                showMessage("Gagal mem-parsing YAML. Periksa format.", true);
+            }
+        });
+
+        copyLinkBtn.addEventListener('click', () => {
+            const textToCopy = outputLink.textContent;
+            if (textToCopy) copyToClipboard(textToCopy, 'Tautan berhasil disalin!', 'Gagal menyalin tautan.');
+            else showMessage('Tidak ada tautan untuk disalin.', true);
+        });
+
+        function parseProxiesFromYaml(yaml) {
+            const proxies = [];
+            const lines = yaml.split('\n');
+            let inProxiesSection = false;
+            let currentProxy = null;
+            for (const line of lines) {
+                if (line.trim().startsWith('proxies:')) {
+                    inProxiesSection = true;
+                    continue;
+                }
+                if (inProxiesSection && (line.trim().startsWith('proxy-groups:') || line.trim().startsWith('rules:'))) {
+                    inProxiesSection = false;
+                    break;
+                }
+                if (inProxiesSection) {
+                    const trimmedLine = line.trim();
+                    if (trimmedLine.startsWith('- name:')) {
+                        if (currentProxy) proxies.push(currentProxy);
+                        currentProxy = {};
+                        currentProxy.name = trimmedLine.substring(trimmedLine.indexOf(':') + 1).trim().replace(/['"]/g, '');
+                    } else if (currentProxy && trimmedLine) {
+                        const [key, ...valueParts] = trimmedLine.split(':');
+                        const value = valueParts.join(':').trim().replace(/['"]/g, '');
+                        if (key.trim() === 'ws-opts') { currentProxy['ws-opts'] = {}; }
+                        else if (key.trim() === 'path' && currentProxy['ws-opts']) { currentProxy['ws-opts'].path = value; }
+                        else if (key.trim() === 'Host' && currentProxy['ws-opts']) {
+                             if(!currentProxy['ws-opts'].headers) currentProxy['ws-opts'].headers = {};
+                             currentProxy['ws-opts'].headers.Host = value;
+                        }
+                        else { currentProxy[key.trim()] = value; }
+                    }
+                }
+            }
+            if (currentProxy) proxies.push(currentProxy);
+            return proxies;
+        }
+
+        function createVmessLink(p) {
+            const config = { v: "2", ps: p.name, add: p.server, port: p.port, id: p.uuid, aid: p.alterId, net: p.network || 'tcp', type: "none", host: p['ws-opts']?.headers?.Host || "", path: p['ws-opts']?.path || "/", tls: p.tls === 'true' ? "tls" : "", sni: p.servername || "" };
+            return "vmess://" + btoa(JSON.stringify(config));
+        }
+
+        function createVlessLink(p) {
+            const url = new URL(`vless://${p.uuid}@${p.server}:${p.port}`);
+            url.searchParams.set('encryption', 'none');
+            if (p.tls === 'true') url.searchParams.set('security', 'tls');
+            if (p.servername) url.searchParams.set('sni', p.servername);
+            if (p.network) url.searchParams.set('type', p.network);
+            if (p.flow) url.searchParams.set('flow', p.flow);
+            if (p.network === 'ws') {
+                url.searchParams.set('path', p['ws-opts']?.path || '/');
+                if (p['ws-opts']?.headers?.Host) url.searchParams.set('host', p['ws-opts'].headers.Host);
+            }
+            url.hash = encodeURIComponent(p.name);
+            return url.toString();
+        }
+
+        function createTrojanLink(p) {
+            const url = new URL(`trojan://${p.password}@${p.server}:${p.port}`);
+            if (p.sni) url.searchParams.set('sni', p.sni);
+            if (p.network === 'ws') {
+                url.searchParams.set('type', 'ws');
+                url.searchParams.set('path', p['ws-opts']?.path || '/');
+                if (p['ws-opts']?.headers?.Host) url.searchParams.set('host', p['ws-opts'].headers.Host);
+            }
+            url.hash = encodeURIComponent(p.name);
+            return url.toString();
+        }
+        
+        // --- Re-implementasi fungsi parsing dan pembuatan YAML (untuk Tab 1) ---
+        function parseVmess(link) {
+            const base64Part = link.substring('vmess://'.length);
+            const decoded = JSON.parse(atob(base64Part));
+            const proxy = { name: decoded.ps || `${decoded.add}:${decoded.port}`, type: 'vmess', server: decoded.add, port: parseInt(decoded.port, 10), uuid: decoded.id, alterId: parseInt(decoded.aid, 10), cipher: decoded.scy || 'auto', tls: decoded.tls === 'tls', 'skip-cert-verify': true };
+            if (decoded.net === 'ws') { proxy.network = 'ws'; proxy['ws-opts'] = { path: decoded.path || '/', headers: { Host: decoded.host || decoded.add } }; }
+            if (decoded.sni) { proxy['servername'] = decoded.sni; }
+            return proxy;
+        }
+
+        function parseVless(link) {
+            const url = new URL(link);
+            const proxy = { name: decodeURIComponent(url.hash.substring(1)) || `${url.hostname}:${url.port}`, type: 'vless', server: url.hostname, port: parseInt(url.port, 10), uuid: url.username, tls: url.searchParams.get('security') === 'tls', 'skip-cert-verify': true, network: url.searchParams.get('type') || 'tcp', flow: url.searchParams.get('flow') || '' };
+            if (proxy.network === 'ws') { proxy['ws-opts'] = { path: url.searchParams.get('path') || '/', headers: { Host: url.searchParams.get('host') || url.hostname } }; }
+            if (url.searchParams.get('sni')) { proxy['servername'] = url.searchParams.get('sni'); }
+            return proxy;
+        }
+
+        function parseTrojan(link) {
+            const url = new URL(link);
+            const proxy = { name: decodeURIComponent(url.hash.substring(1)) || `${url.hostname}:${url.port}`, type: 'trojan', server: url.hostname, port: parseInt(url.port, 10), password: url.username, tls: true, 'skip-cert-verify': true };
+            if (url.searchParams.get('sni')) { proxy['sni'] = url.searchParams.get('sni'); }
+            if (url.searchParams.get('type') === 'ws') { proxy.network = 'ws'; proxy['ws-opts'] = { path: url.searchParams.get('path') || '/', headers: { Host: url.searchParams.get('host') || url.hostname } }; }
+            return proxy;
+        }
+
+        function generateProxiesYaml(proxies) {
+            let yamlString = 'proxies:\n';
+            proxies.forEach(p => {
+                yamlString += `  - name: "${p.name}"\n`;
+                yamlString += `    type: ${p.type}\n`;
+                yamlString += `    server: ${p.server}\n`;
+                yamlString += `    port: ${p.port}\n`;
+                if (p.type === 'trojan') { yamlString += `    password: ${p.password}\n`; }
+                else { yamlString += `    uuid: ${p.uuid}\n`; }
+                if (p.type === 'vmess') { yamlString += `    alterId: ${p.alterId}\n`; yamlString += `    cipher: ${p.cipher}\n`; }
+                if (p.type === 'vless' && p.flow) { yamlString += `    flow: ${p.flow}\n`; }
+                yamlString += `    tls: ${p.tls}\n`;
+                if (p.servername) { yamlString += `    servername: ${p.servername}\n`; }
+                if (p.sni) { yamlString += `    sni: ${p.sni}\n`; }
+                yamlString += `    skip-cert-verify: ${p['skip-cert-verify']}\n`;
+                if (p.network) { yamlString += `    network: ${p.network}\n`; }
+                if (p['ws-opts']) {
+                    yamlString += `    ws-opts:\n`;
+                    yamlString += `      path: "${p['ws-opts'].path}"\n`;
+                    if (p['ws-opts'].headers && p['ws-opts'].headers.Host) {
+                        yamlString += `      headers:\n`;
+                        yamlString += `        Host: ${p['ws-opts'].headers.Host}\n`;
+                    }
+                }
+            });
+            return yamlString;
+        }
+
+        function generateGroupsYaml(proxyNames) {
+            let yamlString = 'proxy-groups:\n';
+            yamlString += '  - name: 🚀 Kebijakan\n';
+            yamlString += '    type: select\n';
+            yamlString += '    proxies:\n';
+            yamlString += '      - ⚡ Otomatis\n';
+            yamlString += '      - 🎬 Streaming\n';
+            yamlString += '      - 🎮 Gaming\n';
+            yamlString += '      - 🌍 Pilih Manual\n';
+            yamlString += '      - DIRECT\n';
+            yamlString += '      - REJECT\n';
+            yamlString += '  - name: ⚡ Otomatis\n';
+            yamlString += '    type: url-test\n';
+            yamlString += '    url: http://www.gstatic.com/generate_204\n';
+            yamlString += '    interval: 300\n';
+            yamlString += '    tolerance: 50\n';
+            yamlString += '    proxies:\n';
+            proxyNames.forEach(name => { yamlString += `      - "${name}"\n`; });
+            yamlString += '  - name: 🎬 Streaming\n';
+            yamlString += '    type: select\n';
+            yamlString += '    proxies:\n';
+            yamlString += '      - ⚡ Otomatis\n';
+            yamlString += '      - DIRECT\n';
+            proxyNames.forEach(name => { yamlString += `      - "${name}"\n`; });
+            yamlString += '  - name: 🎮 Gaming\n';
+            yamlString += '    type: select\n';
+            yamlString += '    proxies:\n';
+            yamlString += '      - ⚡ Otomatis\n';
+            yamlString += '      - DIRECT\n';
+            proxyNames.forEach(name => { yamlString += `      - "${name}"\n`; });
+            yamlString += '  - name: 🌍 Pilih Manual\n';
+            yamlString += '    type: select\n';
+            yamlString += '    proxies:\n';
+            proxyNames.forEach(name => { yamlString += `      - "${name}"\n`; });
+            return yamlString;
+        }
+
+        function generateRulesYaml() {
+            let yamlString = 'rules:\n';
+            yamlString += '  - DOMAIN-KEYWORD,ad,REJECT\n';
+            yamlString += '  - DOMAIN-KEYWORD,advert,REJECT\n';
+            yamlString += '  - DOMAIN-KEYWORD,tracker,REJECT\n';
+            yamlString += '  - DOMAIN-SUFFIX,spotify.com,🎬 Streaming\n';
+            yamlString += '  - DOMAIN-SUFFIX,netflix.com,🎬 Streaming\n';
+            yamlString += '  - DOMAIN-SUFFIX,nflxvideo.net,🎬 Streaming\n';
+            yamlString += '  - DOMAIN-SUFFIX,disneyplus.com,🎬 Streaming\n';
+            yamlString += '  - DOMAIN-SUFFIX,youtube.com,🎬 Streaming\n';
+            yamlString += '  - DOMAIN-SUFFIX,googlevideo.com,🎬 Streaming\n';
+            yamlString += '  - DOMAIN-KEYWORD,steam,🎮 Gaming\n';
+            yamlString += '  - DOMAIN-SUFFIX,steampowered.com,🎮 Gaming\n';
+            yamlString += '  - DOMAIN-SUFFIX,epicgames.com,🎮 Gaming\n';
+            yamlString += '  - IP-CIDR,192.168.0.0/16,DIRECT\n';
+            yamlString += '  - IP-CIDR,10.0.0.0/8,DIRECT\n';
+            yamlString += '  - IP-CIDR,172.16.0.0/12,DIRECT\n';
+            yamlString += '  - IP-CIDR,127.0.0.0/8,DIRECT\n';
+            yamlString += '  - DOMAIN-SUFFIX,local,DIRECT\n';
+            yamlString += '  - MATCH,🚀 Kebijakan\n';
+            return yamlString;
+        }
+        
+        function generateFullYaml(proxies) {
+            const proxyNames = proxies.map(p => p.name);
+            const proxiesYaml = generateProxiesYaml(proxies);
+            const groupsYaml = generateGroupsYaml(proxyNames);
+            const rulesYaml = generateRulesYaml();
+            // Menggabungkan tanpa komentar
+            return `${proxiesYaml}\n${groupsYaml}\n${rulesYaml}`;
+        }
+
+    </script>
+</body>
+</html>
