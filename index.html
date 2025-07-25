@@ -22,7 +22,7 @@
             display: none;
         }
         .tab-panel.active {
-            display: block;
+            display: flex; /* Changed to flex for growing children */
         }
 
         /* Digital Background Animation */
@@ -73,7 +73,7 @@
 </head>
 <body class="digital-bg text-gray-200">
 
-    <div class="w-full max-w-4xl bg-gray-800/80 backdrop-blur-sm main-container rounded-2xl shadow-2xl p-6 md:p-8 relative">
+    <div class="w-full min-h-screen bg-gray-800/80 backdrop-blur-sm main-container p-4 sm:p-6 md:p-8 relative flex flex-col">
         
         <!-- Theme Toggle Button -->
         <button id="theme-toggle" class="absolute top-4 right-4 z-10 p-2 rounded-full text-gray-400 hover:bg-gray-700 focus:outline-none">
@@ -82,74 +82,77 @@
         </button>
 
         <!-- Header -->
-        <div class="text-center mb-6">
+        <header class="text-center mb-6 flex-shrink-0">
             <h1 class="text-3xl md:text-4xl font-bold text-white">NET 🌐 ICON Clash Converter</h1>
             <p class="text-gray-400 mt-2 text-xs">Net Icon Solusi Internet Murah & Pusat Layanan Digital</p>
-        </div>
+        </header>
 
         <!-- Tabs -->
-        <div class="mb-6 flex border-b border-gray-700">
+        <div class="mb-6 flex border-b border-gray-700 flex-shrink-0">
             <button id="tabBtnLinkToYaml" class="tab-button flex-1 py-2 px-4 font-semibold transition-colors duration-300">Link ke YAML</button>
             <button id="tabBtnYamlToLink" class="tab-button flex-1 py-2 px-4 font-semibold transition-colors duration-300">YAML ke Link</button>
         </div>
 
-        <!-- Tab Panel: Link to YAML -->
-        <div id="panelLinkToYaml" class="tab-panel">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Input Section -->
-                <div class="flex flex-col">
-                    <label for="inputLink" class="mb-2 font-semibold text-gray-300">Input Tautan (VMess, VLess, Trojan)</label>
-                    <textarea id="inputLink" class="w-full h-80 flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 placeholder-custom" placeholder="Tempelkan satu atau lebih tautan di sini..."></textarea>
-                </div>
-                <!-- Output Section -->
-                <div class="flex flex-col">
-                    <div class="flex justify-between items-center mb-2">
-                        <label for="outputYaml" class="font-semibold text-gray-300">Output Konfigurasi Bersih (YAML)</label>
-                        <div class="flex gap-2">
-                            <button id="copyYamlBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">Salin</button>
+        <!-- Main Content Area -->
+        <main class="flex-grow flex flex-col">
+            <!-- Tab Panel: Link to YAML -->
+            <div id="panelLinkToYaml" class="tab-panel flex-grow flex-col">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-grow">
+                    <!-- Input Section -->
+                    <div class="flex flex-col">
+                        <label for="inputLink" class="mb-2 font-semibold text-gray-300">Input Tautan (VMess, VLess, Trojan)</label>
+                        <textarea id="inputLink" class="w-full flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 placeholder-custom" placeholder="Tempelkan satu atau lebih tautan di sini..."></textarea>
+                    </div>
+                    <!-- Output Section -->
+                    <div class="flex flex-col">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="outputYaml" class="font-semibold text-gray-300">Output Konfigurasi Bersih (YAML)</label>
+                            <div class="flex gap-2">
+                                <button id="copyYamlBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">Salin</button>
+                            </div>
+                        </div>
+                        <div class="w-full flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 overflow-auto">
+                            <pre id="outputYaml" class="text-gray-300 whitespace-pre-wrap break-all"></pre>
+                        </div>
+                        <!-- Download Section -->
+                        <div class="mt-2 flex items-center gap-2">
+                            <input type="text" id="yamlFilename" class="flex-grow bg-gray-700 border border-gray-600 rounded-lg p-2 text-gray-300 placeholder-custom focus:ring-2 focus:ring-purple-500" placeholder="Nama File..." value="config.yaml">
+                            <button id="downloadYamlBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">Unduh</button>
                         </div>
                     </div>
-                    <div class="w-full h-80 flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 overflow-auto">
-                        <pre id="outputYaml" class="text-gray-300 whitespace-pre-wrap break-all"></pre>
-                    </div>
-                    <!-- Download Section -->
-                    <div class="mt-2 flex items-center gap-2">
-                        <input type="text" id="yamlFilename" class="flex-grow bg-gray-700 border border-gray-600 rounded-lg p-2 text-gray-300 placeholder-custom focus:ring-2 focus:ring-purple-500" placeholder="Nama File..." value="config.yaml">
-                        <button id="downloadYamlBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">Unduh</button>
-                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <button id="convertLinkToYamlBtn" class="w-full md:w-2/3 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-lg shadow-lg">Konversi ke YAML & Buat Grup</button>
                 </div>
             </div>
-            <div class="mt-6 text-center">
-                <button id="convertLinkToYamlBtn" class="w-full md:w-2/3 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-lg shadow-lg">Konversi ke YAML & Buat Grup</button>
-            </div>
-        </div>
 
-        <!-- Tab Panel: YAML to Link -->
-        <div id="panelYamlToLink" class="tab-panel">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Input Section -->
-                <div class="flex flex-col">
-                    <label for="inputYaml" class="mb-2 font-semibold text-gray-300">Input Konfigurasi YAML</label>
-                    <textarea id="inputYaml" class="w-full h-80 flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 placeholder-custom" placeholder="Tempelkan konfigurasi YAML lengkap di sini..."></textarea>
+            <!-- Tab Panel: YAML to Link -->
+            <div id="panelYamlToLink" class="tab-panel flex-grow flex-col">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-grow">
+                    <!-- Input Section -->
+                    <div class="flex flex-col">
+                        <label for="inputYaml" class="mb-2 font-semibold text-gray-300">Input Konfigurasi YAML</label>
+                        <textarea id="inputYaml" class="w-full flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 text-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 placeholder-custom" placeholder="Tempelkan konfigurasi YAML lengkap di sini..."></textarea>
+                    </div>
+                    <!-- Output Section -->
+                    <div class="flex flex-col">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="outputLink" class="font-semibold text-gray-300">Output Tautan (VMess, VLess, Trojan)</label>
+                            <button id="copyLinkBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">Salin</button>
+                        </div>
+                        <div class="w-full flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 overflow-auto">
+                            <pre id="outputLink" class="text-gray-300 whitespace-pre-wrap break-all"></pre>
+                        </div>
+                    </div>
                 </div>
-                <!-- Output Section -->
-                <div class="flex flex-col">
-                    <div class="flex justify-between items-center mb-2">
-                        <label for="outputLink" class="font-semibold text-gray-300">Output Tautan (VMess, VLess, Trojan)</label>
-                        <button id="copyLinkBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">Salin</button>
-                    </div>
-                    <div class="w-full h-80 flex-grow bg-gray-900 border border-gray-700 rounded-lg p-4 overflow-auto">
-                        <pre id="outputLink" class="text-gray-300 whitespace-pre-wrap break-all"></pre>
-                    </div>
+                <div class="mt-6 text-center">
+                    <button id="convertYamlToLinkBtn" class="w-full md:w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-lg shadow-lg">Konversi ke Tautan</button>
                 </div>
             </div>
-            <div class="mt-6 text-center">
-                <button id="convertYamlToLinkBtn" class="w-full md:w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-lg shadow-lg">Konversi ke Tautan</button>
-            </div>
-        </div>
+        </main>
 
         <!-- Footer / Contact Link -->
-        <div class="mt-8 text-center border-t border-gray-700 pt-4 flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+        <footer class="mt-8 text-center border-t border-gray-700 pt-4 flex flex-wrap justify-center items-center gap-x-6 gap-y-2 flex-shrink-0">
             <a href="https://www.youtube.com/@NET-ICON" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-gray-400 hover:text-white transition-colors duration-300 text-sm">
                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.267,4,12,4,12,4S5.733,4,4.186,4.418 c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.733,2,12,2,12s0,4.267,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768 C5.733,20,12,20,12,20s6.267,0,7.814-0.418c0.861-0.23,1.538-0.908,1.768-1.768C22,16.267,22,12,22,12S22,7.733,21.582,6.186z M9.933,15.5V8.5l6.5,3.5L9.933,15.5z"></path></svg>
                 NET ICON
@@ -166,7 +169,7 @@
                  <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 12c0 1.74.45 3.38 1.25 4.85L2 22l5.27-1.38c1.41.75 3 1.18 4.73 1.18H12c5.46 0 9.9-4.45 9.9-9.9S17.5 2 12.04 2zM12 20.15h-.04c-1.5 0-2.92-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32A8.02 8.02 0 014.12 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-7.96 8.15zM17.53 14.3c-.27-.13-1.6-  .79-1.85-.88s-.43-.13-.61.13c-.18.27-.7.88-.86 1.06s-.32.2-.6.07c-.28-.13-1.18-.44-2.25-1.39S10.03 12 9.76 11.73c-.27-.27-.01-.42.12-.55s.27-.32.4-.42c.13-.1.18-.18.27-.3.1-.13.05-.27 0-.4s-.6-.72-.82-.98c-.22-.27-.45-.23-.61-.23h-.5a1 1 0 00-.74.35c-.27.27-1.04 1.02-1.04 2.48s1.06 2.88 1.2 3.08c.13.2 2.08 3.18 5.04 4.48.71.32 1.27.5 1.7.68.71.27 1.36.23 1.88.14.57-.1.94-.2.94-.2.43-.27.9-.7.9-.7s.43-.51.32-1.02c-.1-.5-.37-.58-.64-.7z"></path></svg>
                 ADMIN
             </a>
-        </div>
+        </footer>
 
         <!-- Message Box -->
         <div id="messageBox" class="fixed top-5 right-5 bg-blue-500 text-white py-2 px-4 rounded-lg shadow-lg text-sm opacity-0 transition-opacity duration-300">Pesan</div>
